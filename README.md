@@ -1,3 +1,11 @@
+
+
+https://github.com/user-attachments/assets/12ff955b-76eb-474e-bac3-d33e97cdbbcc
+
+
+
+https://github.com/user-attachments/assets/726b805e-c0f3-41d8-9b2b-6641bd7f2c8a
+
 # Aether Kernel
 # Aether Kernel ⚡
 
