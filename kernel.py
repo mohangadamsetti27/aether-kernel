@@ -106,3 +106,12 @@ class AetherKernel:
                 (agent_id, tool_name, json.dumps(args), tokens, status, time.time())
             )
             conn.commit()
+
+    def protect(self, agent_id: str, tool_name: Optional[str] = None):
+        """Decorator to automatically wrap any existing function with circuit breaker protection."""
+        def decorator(func: Callable):
+            name = tool_name or func.__name__
+            def wrapper(*args, **kwargs):
+                return self.execute_tool(agent_id, name, func, **kwargs)
+            return wrapper
+        return decorator

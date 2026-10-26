@@ -1,0 +1,7 @@
+venv/
+*.db
+*.db-wal
+*.db-shm
+__pycache__/
+*.egg-info/
+.DS_Store
