@@ -4,4 +4,6 @@ venv/
 *.db-shm
 __pycache__/
 *.egg-info/
+dist/
+build/
 .DS_Store
