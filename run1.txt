@@ -1,0 +1,53 @@
+
+========================================================================
+Setup: creating one throwaway incident
+========================================================================
+Created incident INC0010002 (sys_id 8d5afa5583d8131097c898c6feaad37a)
+
+========================================================================
+EXPERIMENT 1: same field (short_description), two simultaneous PATCHes
+========================================================================
+Agent A: HTTP 200 | Agent B: HTTP 200
+Final short_description = 'WRITTEN-BY-A'
+sys_mod_count went 0 -> 1
+
+========================================================================
+EXPERIMENT 2: different fields, two simultaneous PATCHes
+========================================================================
+Agent A: HTTP 200 | Agent B: HTTP 200
+short_description = 'DIFF-FIELD-A'
+description       = 'DIFF-FIELD-B'
+
+========================================================================
+EXPERIMENT 3: read-modify-write on ONE text field (the realistic agent case)
+========================================================================
+  [Agent A] read description = 'base', reasoning 1.5s ...
+  [Agent B] read description = 'base', reasoning 1.5s ...
+Agent A: HTTP 200 | Agent B: HTTP 200
+Final description = 'base | note-from-B'
+
+========================================================================
+EXPERIMENT 4: journal field (work_notes), two simultaneous PATCHes
+========================================================================
+Agent A: HTTP 200 | Agent B: HTTP 200
+Journal entries found: ['journal-entry-from-A', 'journal-entry-from-B']
+
+========================================================================
+EXPERIMENT 5: does the Table API enforce If-Match / ETag?
+========================================================================
+Response header Cache-Control: 'no-cache,no-store,must-revalidate,max-age=-1'
+PATCH with a bogus If-Match -> HTTP 200
+
+========================================================================
+Cleanup
+========================================================================
+Deleted the test incident.
+
+========================================================================
+SUMMARY - paste this back to me
+========================================================================
+1. Both writes returned success and one silently replaced the other (last writer wins, no conflict signal).
+2. Both fields preserved: field-level PATCH is safe when agents touch different fields.
+3. LOST UPDATE REPRODUCED: one agent's note was erased, and both requests still returned success.
+4. Both journal entries preserved: append-style fields are safe.
+5. If-Match was IGNORED: the write went through with a wrong version. No HTTP-level OCC here.
